@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+black = "==22.6.0"
+isort = "==5.10.1"
+ipdb = "==0.13.9"
+pytest = "==7.1.2"
+
+[packages]
+fastapi = "==0.79.0"
+uvicorn = "==0.18.2"
+sqlalchemy = "==1.4.40"
+
+[requires]
+python_version = "3.9.6"
