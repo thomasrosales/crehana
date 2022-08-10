@@ -1,11 +1,15 @@
 import logging
 from typing import List
 
+import graphene
+import strawberry
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
+from strawberry.asgi import GraphQL
 
 from src.db import crud, models, schemas
 from src.db.database import SessionLocal, engine
+from src.db.schemas import Query
 from src.integrations.integrations import IntegrationAPI
 from src.integrations.providers import JSONPlaceHolderProvider
 
@@ -13,6 +17,9 @@ logger = logging.getLogger(__name__)
 
 models.Base.metadata.create_all(bind=engine)
 
+schema = strawberry.Schema(query=Query)
+
+graphql_app = GraphQL(schema)
 
 app = FastAPI()
 
@@ -24,6 +31,10 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+app.add_route("/graphql", graphql_app)
+app.add_websocket_route("/graphql", graphql_app)
 
 
 @app.get("/")

@@ -16,6 +16,14 @@ class Post(Base):
 
     comments = relationship("Comment", back_populates="post")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "title": self.title,
+            "body": self.body,
+        }
+
 
 class Comment(Base):
     __tablename__ = "comments"
