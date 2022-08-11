@@ -145,7 +145,6 @@ mutation {
 
 Output:
 
-
 ```bash
 {
   "data": {
@@ -159,12 +158,35 @@ Output:
 }
 ```
 
-Output:
+### Run Test
 
 ```bash
+python -m pipenv run pytest tests -v
 ```
 
 Output:
+
+```bash
+============================================================================ test session starts =============================================================================
+platform win32 -- Python 3.9.6, pytest-7.1.2, pluggy-1.0.0 -- C:\Users\thomas\.virtualenvs\crehana-GXkyuwey\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\GitHub\crehana
+plugins: anyio-3.6.1
+collected 11 items
+
+tests/test_integration.py::IntegrationAPITestClass::test_sync PASSED                                                                                                    [  9%]
+tests/test_main.py::test_read_main PASSED                                                                                                                               [ 18%]
+tests/test_main.py::test_read_call_integration PASSED                                                                                                                   [ 27%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_delete_model PASSED                                                                                      [ 36%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_get_model_and_comments PASSED                                                                            [ 45%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_get_model_by_id PASSED                                                                                   [ 54%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_get_models PASSED                                                                                        [ 63%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_insert_model PASSED                                                                                      [ 72%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_partial_update_model PASSED                                                                              [ 81%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_retrieve_data PASSED                                                                                     [ 90%]
+tests/test_provider.py::JSONPlaceHolderProviderTestClass::test_update_model PASSED                                                                                      [100%]
+```
+
 # Documentation
 
 ### Create Migrations
