@@ -1,7 +1,7 @@
 from sqlalchemy import update
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from . import models
 
 
 def get_post(db: Session, post_id: int):
@@ -16,7 +16,7 @@ def get_posts(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Post).offset(skip).limit(100).all()
 
 
-def create_post(db: Session, post: schemas.PostCreate):
+def create_post(db: Session, post):
     db_post = models.Post(
         user_id=post.user_id,
         title=post.title,
@@ -28,7 +28,7 @@ def create_post(db: Session, post: schemas.PostCreate):
     return db_post
 
 
-def update_post(db: Session, post: schemas.PostCreate, data):
+def update_post(db: Session, post, data):
     db.execute(
         update(models.Post)
         .where(models.Post.external_post_id == data.id)
@@ -59,14 +59,3 @@ def get_comments_by_post(db: Session, post_id: int, skip: int = 0, limit: int = 
         .limit(100)
         .all()
     )
-
-
-def create_comment(db: Session, comment: schemas.CommentCreate, post_id: int):
-    db_comment = models.Comment(
-        **comment,
-        post_id=post_id,
-    )
-    db.add(db_comment)
-    db.commit()
-    db.refresh(db_comment)
-    return db_comment

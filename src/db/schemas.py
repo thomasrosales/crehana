@@ -60,15 +60,22 @@ class PostType:
 class Query:
     @strawberry.field
     def get_post(self, post_id: strawberry.ID) -> Union[PostType, None]:
-        """
-        Resolvers as a method
-        """
         post = crud.get_post(db=next(get_db()), post_id=post_id)
         return Post.from_orm(post) if post else PostType()
 
     @strawberry.field
     def list_posts(self) -> List[PostType]:
-        """
-        Resolvers as a method
-        """
         return [Post.from_orm(post) for post in crud.get_posts(db=next(get_db()))]
+
+
+@strawberry.type
+class Mutation:
+    @strawberry.mutation
+    def add_post(self, title: str, body: str) -> PostType:
+        post = crud.create_post(
+            db=next(get_db()), post=PostCreate(title=title, body=body, user_id=1)
+        )
+        return Post.from_orm(post)
+
+
+schema = strawberry.Schema(query=Query, mutation=Mutation)

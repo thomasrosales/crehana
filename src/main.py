@@ -1,22 +1,18 @@
 import logging
-from typing import List
 
-import strawberry
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 from strawberry.asgi import GraphQL
 
-from src.db import crud, models, schemas
+from src.db import models
 from src.db.database import engine, get_db
-from src.db.schemas import Query
+from src.db.schemas import schema
 from src.integrations.integrations import IntegrationAPI
 from src.integrations.providers import JSONPlaceHolderProvider
 
 logger = logging.getLogger(__name__)
 
 models.Base.metadata.create_all(bind=engine)
-
-schema = strawberry.Schema(query=Query)
 
 graphql_app = GraphQL(schema)
 
@@ -45,22 +41,3 @@ def call_integration(
         "Integration Sync": "Finished",
         "data": data,
     }
-
-
-@app.get(
-    "/posts/",
-    response_model=List[schemas.Post],
-)
-def read_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_posts(db, skip=skip, limit=limit)
-
-
-@app.get(
-    "/posts/{post_id}/",
-    response_model=schemas.Post,
-)
-def read_post(post_id: int, db: Session = Depends(get_db)):
-    db_post = crud.get_post(db=db, post_id=post_id)
-    if db_post is None:
-        raise HTTPException(status_code=404, detail="POst not found")
-    return db_post
