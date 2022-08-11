@@ -63,6 +63,15 @@ class IntegrationAPI(Integration):
         return {post.external_post_id: post.id for post in posts}
 
     def _create_or_update_comments(self, data, posts):
+        """
+        Creates the comments if they don't exist otherwise
+        the comment will be retrieved from DB, and it will be
+        updated with the new data.
+
+        :param data: List of comments
+        :param posts: List of posts
+        :return: Tuple(List of comments created, List of comments updated)
+        """
         db_comments = []
         db_comments_updated = []
         posts = self._convert_post_in_dict(posts)
@@ -100,6 +109,14 @@ class IntegrationAPI(Integration):
         return db_comments, db_comments_updated
 
     def _create_or_update_posts(self, data):
+        """
+        Creates the posts if they don't exist otherwise
+        the post will be retrieved from DB, and it will be
+        updated with the new data.
+
+        :param data: List of posts
+        :return: Tuple(List of posts created, List of posts updated)
+        """
 
         db_posts = []
         db_posts_updated = []

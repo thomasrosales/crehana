@@ -4,9 +4,9 @@ from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 from strawberry.asgi import GraphQL
 
+from src.api.api import schema
 from src.db import models
 from src.db.database import engine, get_db
-from src.db.schemas import schema
 from src.integrations.integrations import IntegrationAPI
 from src.integrations.providers import JSONPlaceHolderProvider
 

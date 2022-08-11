@@ -106,6 +106,13 @@ Output:
     title
   }
 }
+---
+{
+  listPosts(skip:100, limit:150){
+    title
+    id
+  }
+}
 ```
 
 Output:
