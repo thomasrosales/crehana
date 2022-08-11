@@ -72,4 +72,3 @@ class Query:
         Resolvers as a method
         """
         return [Post.from_orm(post) for post in crud.get_posts(db=next(get_db()))]
-

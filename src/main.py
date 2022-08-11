@@ -1,14 +1,13 @@
 import logging
 from typing import List
 
-import graphene
 import strawberry
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from strawberry.asgi import GraphQL
 
 from src.db import crud, models, schemas
-from src.db.database import SessionLocal, engine
+from src.db.database import engine, get_db
 from src.db.schemas import Query
 from src.integrations.integrations import IntegrationAPI
 from src.integrations.providers import JSONPlaceHolderProvider
@@ -22,15 +21,6 @@ schema = strawberry.Schema(query=Query)
 graphql_app = GraphQL(schema)
 
 app = FastAPI()
-
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 app.add_route("/graphql", graphql_app)
@@ -50,8 +40,11 @@ def call_integration(
 ):
     provider = JSONPlaceHolderProvider()
     integration = IntegrationAPI(db=db, provider=provider)
-    integration.sync()
-    return {"Integration Sync": "Finished"}
+    data = integration.sync()
+    return {
+        "Integration Sync": "Finished",
+        "data": data,
+    }
 
 
 @app.get(
@@ -71,11 +64,3 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
     if db_post is None:
         raise HTTPException(status_code=404, detail="POst not found")
     return db_post
-
-
-@app.get(
-    "/comments/",
-    response_model=List[schemas.Comment],
-)
-def read_comments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_comments(db, skip=skip, limit=limit)

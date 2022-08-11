@@ -8,13 +8,16 @@ class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, index=True)
+    external_post_id = Column(Integer, index=True)
     user_id = Column(Integer, index=True)
     title = Column(String(100))
     body = Column(Text)
 
     # Relationships
 
-    comments = relationship("Comment", back_populates="post")
+    comments = relationship(
+        "Comment", back_populates="post", cascade="all, delete, delete-orphan"
+    )
 
     def to_dict(self):
         return {
@@ -29,6 +32,7 @@ class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(Integer, primary_key=True, index=True)
+    external_comment_id = Column(Integer, index=True)
     name = Column(String(100), index=True)
     email = Column(String, index=True)
     body = Column(Text)

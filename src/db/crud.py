@@ -1,3 +1,4 @@
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -25,6 +26,25 @@ def create_post(db: Session, post: schemas.PostCreate):
     db.commit()
     db.refresh(db_post)
     return db_post
+
+
+def update_post(db: Session, post: schemas.PostCreate, data):
+    db.execute(
+        update(models.Post)
+        .where(models.Post.external_post_id == data.id)
+        .values(
+            user_id=data.userId,
+            title=data.title,
+            body=data.body,
+        )
+    )
+    return db.query(models.Post).filter(models.Post.external_post_id == data.id).first()
+
+
+def delete_post(db: Session, post_id: int):
+    db.query(models.Comment).filter(models.Comment.post_id == post_id).delete()
+    db.query(models.Post).filter(models.Post.id == post_id).delete()
+    db.commit()
 
 
 def get_comments(db: Session, skip: int = 0, limit: int = 100):
