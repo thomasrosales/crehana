@@ -1,11 +1,5 @@
 # crehana
 
-### Start Application
-
-```bash
-uvicorn src.main:app --reload
-```
-
 ## Run Application
 
 ### Requirements
@@ -76,7 +70,6 @@ We can run the integration in two ways: (1) execute the integration via CLI:
 ```bash
 python -m pipenv run python managment.py --help
 python -m pipenv run python managment.py --confirm
-uvicorn src.main:app --reload
 ```
 
 Output:
@@ -86,6 +79,12 @@ Output:
 ```
 
 (2) go to the next endpoint: http://127.0.0.1:8000/call_integration/
+
+### Endpoints
+
+- http://127.0.0.1:8000/call_integration/
+- http://127.0.0.1:8000/graphql/
+- http://127.0.0.1:8000/docs
 
 ### GraphQl Examples
 

@@ -19,8 +19,8 @@ graphql_app = GraphQL(schema)
 app = FastAPI()
 
 
-app.add_route("/graphql", graphql_app)
-app.add_websocket_route("/graphql", graphql_app)
+app.add_route("/graphql/", graphql_app)
+app.add_websocket_route("/graphql/", graphql_app)
 
 
 @app.get("/")

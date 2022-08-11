@@ -39,9 +39,6 @@ class Integration:
 
 
 class IntegrationAPI(Integration):
-    def __init__(self, *args, **kwargs):
-        super(IntegrationAPI, self).__init__(*args, **kwargs)
-
     def pre_sync(self, *args, **kwargs):
         logger.info(f"Retrieving data from provider: {self.provider}")
 
